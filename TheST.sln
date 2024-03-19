@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audio", "Audio", "{22F773C1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.Core", "Audio.Core\Audio.Core.csproj", "{90E88465-7A60-4CBB-AC4C-7F0B046231EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.Playback", "Audio.Capturing\Audio.Playback.csproj", "{5062CFCE-A4D4-4E94-90BF-93F62678AF24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.Playback", "Audio.Playback\Audio.Playback.csproj", "{5062CFCE-A4D4-4E94-90BF-93F62678AF24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audio.Capture", "Audio.Capture\Audio.Capture.csproj", "{1956C3A2-E2E0-4F0F-AC81-17CD42E7C0EE}"
 EndProject

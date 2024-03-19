@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Audio.Capture\Audio.Capture.csproj" />
-    <ProjectReference Include="..\Audio.Capturing\Audio.Playback.csproj" />
+    <ProjectReference Include="..\Audio.Playback\Audio.Playback.csproj" />
     <ProjectReference Include="..\Audio.Core\Audio.Core.csproj" />
   </ItemGroup>
 
