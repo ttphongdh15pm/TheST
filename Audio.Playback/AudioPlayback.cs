@@ -40,6 +40,7 @@ namespace Audio.Playback
 
         public void Play()
         {
+            _bufferedWaveProvider?.ClearBuffer();
             _waveOut?.Play();
         }
 

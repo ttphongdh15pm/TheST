@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Audio.Core\Audio.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="audio-processing.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

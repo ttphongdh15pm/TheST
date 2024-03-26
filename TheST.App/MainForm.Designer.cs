@@ -34,6 +34,9 @@ namespace TheST.App
             _waveFormatInfo = new Controls.WaveFormatInfo();
             _startButton = new Button();
             _waveFormatConfiguration = new Controls.WaveFormatConfiguration();
+            _ckbApplyEffect = new CheckBox();
+            groupBox1 = new GroupBox();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // _deviceConfiguration
@@ -78,17 +81,41 @@ namespace TheST.App
             _waveFormatConfiguration.TabIndex = 5;
             _waveFormatConfiguration.Title = "Wave format";
             // 
+            // ckbApplyEffect
+            // 
+            _ckbApplyEffect.AutoSize = true;
+            _ckbApplyEffect.Location = new Point(6, 22);
+            _ckbApplyEffect.Name = "ckbApplyEffect";
+            _ckbApplyEffect.Size = new Size(90, 19);
+            _ckbApplyEffect.TabIndex = 6;
+            _ckbApplyEffect.Text = "Apply effect";
+            _ckbApplyEffect.UseVisualStyleBackColor = true;
+            _ckbApplyEffect.CheckedChanged += ckbApplyEffect_CheckedChanged;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(_ckbApplyEffect);
+            groupBox1.Location = new Point(12, 138);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(320, 92);
+            groupBox1.TabIndex = 7;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Audio processing options";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(889, 382);
+            ClientSize = new Size(889, 239);
+            Controls.Add(groupBox1);
             Controls.Add(_waveFormatConfiguration);
             Controls.Add(_startButton);
             Controls.Add(_waveFormatInfo);
             Controls.Add(_deviceConfiguration);
             Name = "MainForm";
             Text = "Form1";
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -98,5 +125,7 @@ namespace TheST.App
         private Controls.WaveFormatInfo _waveFormatInfo;
         private Button _startButton;
         private Controls.WaveFormatConfiguration _waveFormatConfiguration;
+        private CheckBox _ckbApplyEffect;
+        private GroupBox groupBox1;
     }
 }

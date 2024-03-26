@@ -4,7 +4,7 @@ using TheST.Core.Buffers;
 
 namespace TheST.Sockets
 {
-    public sealed class UdpCommunicator
+    public sealed class UdpCommunicator : IDisposable
     {
         private readonly UdpClient _udpClient;
         private bool isListening;
@@ -20,10 +20,16 @@ namespace TheST.Sockets
 
         public event EventHandler<ReadOnlyMemory<byte>>? MessageReceived;
         public event EventHandler<string>? OnError;
-        public void Close()
+        public void Dispose()
         {
-            StopListening();
-            _udpClient.Close();
+            try
+            {
+                _udpClient?.Close();
+                _udpClient?.Dispose();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         public void SendBytes(ReadOnlySpan<byte> bytes)
@@ -37,12 +43,6 @@ namespace TheST.Sockets
         public void StartListening()
         {
             receiveTask = Task.Run(() => ListenForMessages());
-        }
-
-        public void StopListening()
-        {
-            isListening = false;
-            receiveTask?.Wait();
         }
 
         private void ListenForMessages()
@@ -61,6 +61,7 @@ namespace TheST.Sockets
                     byte[] data = _udpClient.Receive(ref localEndPoint);
                     MessageReceived?.Invoke(this, data);
                 }
+                catch (SocketException) { }
                 catch (Exception ex)
                 {
                     OnError?.Invoke(this, ex.Message);
