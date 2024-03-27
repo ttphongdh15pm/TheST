@@ -4,5 +4,6 @@
     {
         void Put(ReadOnlySpan<byte> input);
         void Start();
+        void Stop();
     }
 }

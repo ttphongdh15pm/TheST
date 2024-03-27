@@ -20,6 +20,10 @@
         {
             _isRunning = true;
         }
+        public override void Stop()
+        {
+            _isRunning = false;
+        }
 
         protected override void InternalDispose()
         {

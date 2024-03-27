@@ -19,6 +19,7 @@
         public abstract void Put(ReadOnlySpan<byte> input);
 
         public abstract void Start();
+        public abstract void Stop();
 
         private void Dispose(bool disposing)
         {

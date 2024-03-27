@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using TheST.Core.Buffers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TheST.Sockets
 {
@@ -24,6 +25,8 @@ namespace TheST.Sockets
         {
             try
             {
+                MessageReceived = null;
+                OnError = null;
                 _udpClient?.Close();
                 _udpClient?.Dispose();
             }
@@ -42,6 +45,10 @@ namespace TheST.Sockets
 
         public void StartListening()
         {
+            if (isListening)
+            {
+                return;
+            }
             receiveTask = Task.Run(() => ListenForMessages());
         }
 

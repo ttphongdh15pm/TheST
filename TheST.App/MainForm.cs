@@ -2,13 +2,11 @@ using Audio;
 using Audio.Capture;
 using Audio.Playback;
 using NAudio.Wave;
-using System.Runtime.InteropServices;
+using System.Net;
 using TheST.App.AudioProcessing;
 using TheST.App.Controls;
 using TheST.App.EventArguments;
-using TheST.Core.Buffers;
 using TheST.Models;
-using TheST.Sockets;
 
 namespace TheST.App
 {
@@ -18,8 +16,9 @@ namespace TheST.App
         const string StopLabel = "Stop";
         private readonly IAudioCapture _audioCapture;
         private readonly IAudioPlayback _audioPlayback;
-        private WaveFormat _waveFormat = new WaveFormat(8000, 16, 1);
-        private readonly IAudioPipeline _audioPipeline;
+        private WaveFormat _waveFormat = new WaveFormat(44100, 32, 1);
+
+        private readonly AudioGateway _audioGateway;
         public MainForm()
         {
             InitializeComponent();
@@ -27,9 +26,9 @@ namespace TheST.App
             _audioCapture.DataAvailable += AudioCapture_DataAvailable;
             _audioPlayback = new AudioPlayback(_waveFormat);
             _startButton.Text = StartLabel;
-            _audioPipeline = new EmptyAudioPipeline(this);
+            _audioGateway = new AudioGateway(this);
         }
-
+         
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -52,30 +51,38 @@ namespace TheST.App
 
         private void AudioCapture_DataAvailable(object? sender, ReadOnlyMemory<byte> inputSamples)
         {
-            _audioPipeline?.Put(inputSamples.Span);
+            _audioGateway.Send(inputSamples.Span);
         }
-
+        private bool IsValidIpAddress(string ipAddress)
+        {
+            return IPAddress.TryParse(ipAddress, out _);
+        }
         private void HandleStartButtonClick(object sender, EventArgs e)
         {
             if (_startButton.Text == StartLabel)
             {
+                var remoteAddress = txtRemoteAddress.Text;
+                if (!IsValidIpAddress(remoteAddress))
+                {
+                    errorProvider1.SetError(txtRemoteAddress, "Please enter a valid IP address");
+                    return;
+                }
                 _audioCapture.StartCapturing();
                 _audioPlayback.Play();
-                _audioPipeline?.Start();
+                _audioGateway.Start(remoteAddress);
                 _startButton.Text = StopLabel;
                 _waveFormatConfiguration.Enabled = false;
                 _deviceConfiguration.Enabled = false;
-                _ckbApplyEffect.Enabled = false;
             }
             else
             {
                 _startButton.Enabled = true;
                 _audioCapture.StopCapturing();
                 _audioPlayback.Stop();
+                _audioGateway.Stop();
                 _startButton.Text = StartLabel;
                 _waveFormatConfiguration.Enabled = true;
                 _deviceConfiguration.Enabled = true;
-                _ckbApplyEffect.Enabled = true;
             }
         }
 
@@ -100,10 +107,6 @@ namespace TheST.App
         public void ReceiveBuffer(ReadOnlySpan<byte> buffer)
         {
             _audioPlayback.AddSample(buffer);
-        }
-
-        private void ckbApplyEffect_CheckedChanged(object sender, EventArgs e)
-        {
         }
     }
 }
