@@ -19,7 +19,7 @@ namespace TheST.App
         private readonly IAudioCapture _audioCapture;
         private readonly IAudioPlayback _audioPlayback;
         private WaveFormat _waveFormat = new WaveFormat(8000, 16, 1);
-        private IAudioPipeline? _audioPipeline;
+        private readonly IAudioPipeline _audioPipeline;
         public MainForm()
         {
             InitializeComponent();
@@ -27,7 +27,7 @@ namespace TheST.App
             _audioCapture.DataAvailable += AudioCapture_DataAvailable;
             _audioPlayback = new AudioPlayback(_waveFormat);
             _startButton.Text = StartLabel;
-            _audioPipeline = AudioPipelineFactory.Create(this, _ckbApplyEffect.Checked);
+            _audioPipeline = new EmptyAudioPipeline(this);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -52,7 +52,7 @@ namespace TheST.App
 
         private void AudioCapture_DataAvailable(object? sender, ReadOnlyMemory<byte> inputSamples)
         {
-            _audioPipeline.Put(inputSamples.Span);
+            _audioPipeline?.Put(inputSamples.Span);
         }
 
         private void HandleStartButtonClick(object sender, EventArgs e)
@@ -104,8 +104,6 @@ namespace TheST.App
 
         private void ckbApplyEffect_CheckedChanged(object sender, EventArgs e)
         {
-            _audioPipeline?.Dispose();
-            _audioPipeline = AudioPipelineFactory.Create(this, _ckbApplyEffect.Checked);
         }
     }
 }
