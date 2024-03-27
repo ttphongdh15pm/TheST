@@ -38,9 +38,9 @@ namespace TheST.App
             groupBox1 = new GroupBox();
             txtRemoteAddress = new TextBox();
             label1 = new Label();
-            errorProvider1 = new ErrorProvider(components);
+            _ipAddressInvalidError = new ErrorProvider(components);
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)_ipAddressInvalidError).BeginInit();
             SuspendLayout();
             // 
             // _deviceConfiguration
@@ -102,6 +102,7 @@ namespace TheST.App
             txtRemoteAddress.Name = "txtRemoteAddress";
             txtRemoteAddress.Size = new Size(197, 23);
             txtRemoteAddress.TabIndex = 3;
+            txtRemoteAddress.Text = "127.0.0.1";
             // 
             // label1
             // 
@@ -112,9 +113,9 @@ namespace TheST.App
             label1.TabIndex = 0;
             label1.Text = "Remote address";
             // 
-            // errorProvider1
+            // _ipAddressInvalidError
             // 
-            errorProvider1.ContainerControl = this;
+            _ipAddressInvalidError.ContainerControl = this;
             // 
             // MainForm
             // 
@@ -130,7 +131,7 @@ namespace TheST.App
             Text = "Form1";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)_ipAddressInvalidError).EndInit();
             ResumeLayout(false);
         }
 
@@ -143,6 +144,6 @@ namespace TheST.App
         private GroupBox groupBox1;
         private TextBox txtRemoteAddress;
         private Label label1;
-        private ErrorProvider errorProvider1;
+        private ErrorProvider _ipAddressInvalidError;
     }
 }

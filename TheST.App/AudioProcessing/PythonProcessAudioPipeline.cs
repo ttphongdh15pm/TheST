@@ -7,17 +7,14 @@ namespace TheST.App.AudioProcessing
     {
         private readonly object _startStopLock = new object();
 
-        private readonly UdpCommunicator _udpListener;
-
-        private readonly UdpMemorySender _udpSender;
+        private readonly UdpCommunicator _udpCommunicator;
 
         private volatile bool _isRunning;
 
         private Process? pythonAudioProcess; 
         public PythonProcessAudioPipeline(IAudioBufferDataHandler handler) : base(handler)
         {
-            _udpSender = new UdpMemorySender("127.0.0.3", 6666);
-            _udpListener = new UdpCommunicator("127.0.0.3", 7777);
+            _udpCommunicator = new UdpCommunicator("127.0.0.1", 7777);
         }
 
         public Process? ExecutePythonScript(string pythonFilePath, string arguments = "")
@@ -42,7 +39,7 @@ namespace TheST.App.AudioProcessing
                 {
                     return;
                 }
-                _udpSender.Send(input);
+                _udpCommunicator.SendBytes(input, "127.0.0.1", 6666);
             }
         }
 
@@ -54,9 +51,9 @@ namespace TheST.App.AudioProcessing
                 {
                     return;
                 }
-                _udpListener.MessageReceived -= HandleMessageReceived;
-                _udpListener.MessageReceived += HandleMessageReceived;
-                _udpListener.StartListening();
+                _udpCommunicator.MessageReceived -= HandleMessageReceived;
+                _udpCommunicator.MessageReceived += HandleMessageReceived;
+                _udpCommunicator.StartListening();
                 _isRunning = true;
                 pythonAudioProcess = ExecutePythonScript("./audio-processing.py");
             }
@@ -71,14 +68,14 @@ namespace TheST.App.AudioProcessing
                     return;
                 }
                 pythonAudioProcess?.Kill();
-                _udpListener.MessageReceived -= HandleMessageReceived;
+                _udpCommunicator.MessageReceived -= HandleMessageReceived;
                 _isRunning = false;
             }
         }
 
         protected override void InternalDispose()
         {
-            if (_udpListener == null)
+            if (_udpCommunicator == null)
             {
                 return;
             }
@@ -89,8 +86,8 @@ namespace TheST.App.AudioProcessing
                 {
                     return;
                 }
-                _udpListener.MessageReceived -= HandleMessageReceived;
-                _udpListener.Dispose();
+                _udpCommunicator.MessageReceived -= HandleMessageReceived;
+                _udpCommunicator.Dispose();
                 _isRunning = false;
             }
         }

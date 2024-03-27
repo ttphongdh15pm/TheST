@@ -3,6 +3,7 @@ using Audio.Capture;
 using Audio.Playback;
 using NAudio.Wave;
 using System.Net;
+using System.Windows.Forms;
 using TheST.App.AudioProcessing;
 using TheST.App.Controls;
 using TheST.App.EventArguments;
@@ -64,9 +65,10 @@ namespace TheST.App
                 var remoteAddress = txtRemoteAddress.Text;
                 if (!IsValidIpAddress(remoteAddress))
                 {
-                    errorProvider1.SetError(txtRemoteAddress, "Please enter a valid IP address");
+                    _ipAddressInvalidError.SetError(txtRemoteAddress, "Please enter a valid IP address");
                     return;
                 }
+                _ipAddressInvalidError.Clear();
                 _audioCapture.StartCapturing();
                 _audioPlayback.Play();
                 _audioGateway.Start(remoteAddress);

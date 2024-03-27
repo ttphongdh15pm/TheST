@@ -43,13 +43,21 @@ namespace TheST.Sockets
             }
         }
 
+        public void SendBytes(ReadOnlySpan<byte> bytes, string remoteAddress, int remotePort)
+        {
+            using (var tempBuffer = new RentedMemory<byte>(bytes))
+            {
+                _udpClient.Send(tempBuffer, tempBuffer.Length, new IPEndPoint(IPAddress.Parse(remoteAddress), remotePort));
+            }
+        }
+
         public void StartListening()
         {
             if (isListening)
             {
                 return;
             }
-            receiveTask = Task.Run(() => ListenForMessages());
+            receiveTask = Task.Run(ListenForMessages);
         }
 
         private void ListenForMessages()
