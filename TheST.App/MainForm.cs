@@ -29,7 +29,7 @@ namespace TheST.App
             _startButton.Text = StartLabel;
             _audioGateway = new AudioGateway(this);
         }
-         
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -62,10 +62,10 @@ namespace TheST.App
         {
             if (_startButton.Text == StartLabel)
             {
-                var remoteAddress = txtRemoteAddress.Text;
+                var remoteAddress = _txtRemoteAddress.Text;
                 if (!IsValidIpAddress(remoteAddress))
                 {
-                    _ipAddressInvalidError.SetError(txtRemoteAddress, "Please enter a valid IP address");
+                    _ipAddressInvalidError.SetError(_txtRemoteAddress, "Please enter a valid IP address");
                     return;
                 }
                 _ipAddressInvalidError.Clear();
@@ -75,6 +75,7 @@ namespace TheST.App
                 _startButton.Text = StopLabel;
                 _waveFormatConfiguration.Enabled = false;
                 _deviceConfiguration.Enabled = false;
+                _txtRemoteAddress.Enabled = false;
             }
             else
             {
@@ -85,6 +86,7 @@ namespace TheST.App
                 _startButton.Text = StartLabel;
                 _waveFormatConfiguration.Enabled = true;
                 _deviceConfiguration.Enabled = true;
+                _txtRemoteAddress.Enabled = true;
             }
         }
 
@@ -109,6 +111,11 @@ namespace TheST.App
         public void ReceiveBuffer(ReadOnlySpan<byte> buffer)
         {
             _audioPlayback.AddSample(buffer);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            _audioGateway.AppleAIEffect = checkBox1.Checked;
         }
     }
 }

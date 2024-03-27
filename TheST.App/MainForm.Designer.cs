@@ -36,9 +36,10 @@ namespace TheST.App
             _startButton = new Button();
             _waveFormatConfiguration = new Controls.WaveFormatConfiguration();
             groupBox1 = new GroupBox();
-            txtRemoteAddress = new TextBox();
+            _txtRemoteAddress = new TextBox();
             label1 = new Label();
             _ipAddressInvalidError = new ErrorProvider(components);
+            checkBox1 = new CheckBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)_ipAddressInvalidError).BeginInit();
             SuspendLayout();
@@ -87,22 +88,23 @@ namespace TheST.App
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(txtRemoteAddress);
+            groupBox1.Controls.Add(checkBox1);
+            groupBox1.Controls.Add(_txtRemoteAddress);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(12, 138);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(320, 50);
+            groupBox1.Size = new Size(320, 54);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "Configuration";
             // 
-            // txtRemoteAddress
+            // _txtRemoteAddress
             // 
-            txtRemoteAddress.Location = new Point(103, 16);
-            txtRemoteAddress.Name = "txtRemoteAddress";
-            txtRemoteAddress.Size = new Size(197, 23);
-            txtRemoteAddress.TabIndex = 3;
-            txtRemoteAddress.Text = "127.0.0.1";
+            _txtRemoteAddress.Location = new Point(103, 16);
+            _txtRemoteAddress.Name = "_txtRemoteAddress";
+            _txtRemoteAddress.Size = new Size(119, 23);
+            _txtRemoteAddress.TabIndex = 3;
+            _txtRemoteAddress.Text = "127.0.0.1";
             // 
             // label1
             // 
@@ -117,16 +119,29 @@ namespace TheST.App
             // 
             _ipAddressInvalidError.ContainerControl = this;
             // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(228, 18);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(78, 19);
+            checkBox1.TabIndex = 4;
+            checkBox1.Text = "Use Effect";
+            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(889, 196);
+            ClientSize = new Size(889, 197);
             Controls.Add(groupBox1);
             Controls.Add(_waveFormatConfiguration);
             Controls.Add(_startButton);
             Controls.Add(_waveFormatInfo);
             Controls.Add(_deviceConfiguration);
+            Location = new Point(905, 236);
+            MaximumSize = new Size(905, 236);
             Name = "MainForm";
             Text = "Form1";
             groupBox1.ResumeLayout(false);
@@ -142,8 +157,9 @@ namespace TheST.App
         private Button _startButton;
         private Controls.WaveFormatConfiguration _waveFormatConfiguration;
         private GroupBox groupBox1;
-        private TextBox txtRemoteAddress;
+        private TextBox _txtRemoteAddress;
         private Label label1;
         private ErrorProvider _ipAddressInvalidError;
+        private CheckBox checkBox1;
     }
 }

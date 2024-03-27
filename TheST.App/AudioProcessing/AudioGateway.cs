@@ -1,11 +1,12 @@
-﻿using Audio;
-using TheST.Sockets;
+﻿using TheST.Sockets;
 
 namespace TheST.App.AudioProcessing
 {
     internal class AudioGateway : IAudioBufferDataHandler
     {
         private readonly IAudioBufferDataHandler _audioBufferDataHandler;
+
+        private readonly IAudioPipeline _emptyPipeline;
 
         private readonly IAudioPipeline _pythonPipeline;
 
@@ -14,13 +15,21 @@ namespace TheST.App.AudioProcessing
         public AudioGateway(IAudioBufferDataHandler audioBufferDataHandler)
         {
             _pythonPipeline = new PythonProcessAudioPipeline(this);
+            _emptyPipeline = new EmptyAudioPipeline(this);
             _audioBufferDataHandler = audioBufferDataHandler;
         }
+
+        public bool AppleAIEffect { get; set; } = false;
 
         //Receive from python
         public void ReceiveBuffer(ReadOnlySpan<byte> buffer)
         {
             _udpCommunicator?.SendBytes(buffer);
+        }
+
+        public void Send(ReadOnlySpan<byte> data)
+        {
+            SendToActivePipeline(data);
         }
 
         public void Start(string remoteAddress)
@@ -30,16 +39,23 @@ namespace TheST.App.AudioProcessing
             _udpCommunicator.MessageReceived += UdpListener_MessageReceived;
             _udpCommunicator.StartListening();
             _pythonPipeline.Start();
-        }
-
-        public void Send(ReadOnlySpan<byte> data)
-        {
-            _pythonPipeline.Put(data);
+            _emptyPipeline.Start();
         }
 
         public void Stop()
         {
             _pythonPipeline.Stop();
+            _emptyPipeline.Stop();
+        }
+
+        private void SendToActivePipeline(ReadOnlySpan<byte> data)
+        {
+            if (AppleAIEffect)
+            {
+                _pythonPipeline.Put(data);
+                return;
+            }
+            _emptyPipeline.Put(data);
         }
 
         //Receive from partner
