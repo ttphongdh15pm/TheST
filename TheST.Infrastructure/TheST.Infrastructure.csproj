@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Audio.Core\Audio.Core.csproj" />
+    <Folder Include="Data\" />
+    <Folder Include="Logging\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

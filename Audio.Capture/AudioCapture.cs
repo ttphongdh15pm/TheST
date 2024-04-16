@@ -1,17 +1,31 @@
-﻿using Audio.Devices;
+﻿using Audio.Capture.Abstract;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
-using TheST.Buffers;
-using TheST.Core.Buffers;
+using TheST.Common;
 
 namespace Audio.Capture
 {
-    public class AudioCapture : IAudioCapture
+    public sealed class AudioCapture : IAudioCapture
     {
         private readonly MemoryBufferQueue<byte> _buffer = new MemoryBufferQueue<byte>(1024);
+
+        private readonly ICaptureDeviceProvider _deviceProvider;
+
         private string _deviceId = "";
+
         private WasapiCapture? _wasapiCapture;
+
         private WaveFormat? _waveFormat;
+
+        public AudioCapture(ICaptureDeviceProvider deviceProvider, WaveFormat waveFormat)
+        {
+            _deviceProvider = deviceProvider;
+            _waveFormat = waveFormat ?? throw new ArgumentException(nameof(waveFormat));
+            UpdateCaptureDevice("");
+        }
+
+        public event DataAvailableEventHandler? DataAvailable;
+
         public bool IsCapturing => _wasapiCapture != null && _wasapiCapture.CaptureState == CaptureState.Capturing;
 
         public WaveFormat? WaveFormat
@@ -23,14 +37,6 @@ namespace Audio.Capture
                 UpdateCaptureDevice(_deviceId);
             }
         }
-
-        public AudioCapture(WaveFormat waveFormat)
-        {
-            _waveFormat = waveFormat ?? throw new ArgumentException(nameof(waveFormat));
-            UpdateCaptureDevice("");
-        }
-
-        public event DataAvailableEventHandler? DataAvailable;
 
         public void StartCapturing()
         {
@@ -48,7 +54,7 @@ namespace Audio.Capture
 
         public bool UpdateCaptureDevice(string deviceId)
         {
-            if (DevicesFactory.CaptureDeviceManager.TryGetDevice(deviceId, out var device))
+            if (_deviceProvider.TryGetDevice(deviceId, out var device))
             {
                 _deviceId = deviceId;
                 var currentCaptureState = IsCapturing;

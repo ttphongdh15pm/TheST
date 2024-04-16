@@ -1,16 +1,30 @@
-﻿using Audio.Devices;
-using Audio.WaveProviders;
+﻿using Audio.WaveProvider;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
 namespace Audio.Playback
 {
-    public sealed class AudioPlayback : IAudioPlayback
+    public class AudioPlayback : IAudioPlayback
     {
-        private BufferedWaveProviderExtend? _bufferedWaveProvider;
+        private readonly IPlaybackDeviceProvider _deviceProvider;
+
+        private BufferedQueueWaveProvider? _bufferedWaveProvider;
+
         private WaveFormat _currentWaveFormat;
+
         private string? _deviceId;
+
         private WasapiOut? _waveOut;
+
+        public AudioPlayback(IPlaybackDeviceProvider deviceProvider, WaveFormat waveFormat)
+        {
+            _deviceProvider = deviceProvider;
+            _currentWaveFormat = waveFormat;
+            UpdatePlaybackDeviceInternal(string.Empty);
+        }
+
+        public bool IsPlaying => _waveOut?.PlaybackState == PlaybackState.Playing;
+
         public WaveFormat WaveFormat
         {
             get => _currentWaveFormat;
@@ -20,17 +34,10 @@ namespace Audio.Playback
                 UpdatePlaybackDeviceInternal(_deviceId ?? string.Empty);
             }
         }
-        public bool IsPlaying => _waveOut?.PlaybackState == PlaybackState.Playing;
-
-        public AudioPlayback(WaveFormat waveFormat)
-        {
-            _currentWaveFormat = waveFormat;
-            UpdatePlaybackDeviceInternal(string.Empty);
-        }
 
         public void AddSample(ReadOnlySpan<byte> sample)
         {
-            _bufferedWaveProvider?.AddSamples(sample);  
+            _bufferedWaveProvider?.AddSamples(sample);
         }
 
         public void Pause()
@@ -58,7 +65,7 @@ namespace Audio.Playback
         {
             try
             {
-                if (!DevicesFactory.PlaybackDeviceManager.TryGetDevice(deviceId, out var device) && device is null)
+                if (!_deviceProvider.TryGetDevice(deviceId, out var device) && device is null)
                 {
                     return false;
                 }
@@ -71,7 +78,7 @@ namespace Audio.Playback
                 }
 
                 _waveOut = new WasapiOut(device, AudioClientShareMode.Shared, false, 100);
-                _bufferedWaveProvider = new BufferedWaveProviderExtend(_currentWaveFormat);
+                _bufferedWaveProvider = new BufferedQueueWaveProvider(_currentWaveFormat);
                 _waveOut.Init(_bufferedWaveProvider);
                 if (currentPlaybackState)
                 {

@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Audio.Core\Audio.Core.csproj" />
-    <ProjectReference Include="..\TheST.Core\TheST.Core.csproj" />
   </ItemGroup>
 
 </Project>
