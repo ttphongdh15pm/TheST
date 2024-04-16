@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.Playback", "Audio.Pla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.Capture", "Audio.Capture\Audio.Capture.csproj", "{DFBF800B-F272-46A1-84B5-149285BC57F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheST.Presentation", "TheST.Presentation\TheST.Presentation.csproj", "{7BB1BDA7-364D-4F89-87F8-5A0347248026}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheST.Presentation", "TheST.Presentation\TheST.Presentation.csproj", "{7BB1BDA7-364D-4F89-87F8-5A0347248026}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
