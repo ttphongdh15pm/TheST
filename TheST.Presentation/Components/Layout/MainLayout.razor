@@ -1,8 +1,34 @@
 ﻿@inherits LayoutComponentBase
 
-<RadzenLayout Style="grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
-    <RadzenSidebar @bind-Expanded="@sidebarExpanded">
+<style>
 
+    .sidebar-header {
+        height: 120px;
+        width: 100%;
+        display: flex;
+        background-color: aqua;
+        flex-direction: column;
+    }
+
+    .sidebar-header-user-profile {
+        height: 80px;
+    }
+
+    .search-textbox{
+        width: 100%;
+    }
+</style>
+<RadzenLayout Style="grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
+    <RadzenSidebar Style="display:flex; 
+                       flex-direction: column; 
+                       justify-content: space-around;">
+        <div class="sidebar-header">
+            <UserProfile Class="sidebar-header-user-profile" />
+            <div style="position: relative;">
+                <RadzenTextBox @bind-Value="@textBoxValue" Placeholder="Search for people"class="search-textbox"/>
+            </div>
+        </div>
+        <ContactList Style="height: 100%; width: 100%; background: grey;"></ContactList>
     </RadzenSidebar>
     <RadzenBody>
         <div class="rz-p-4">
@@ -12,5 +38,5 @@
 </RadzenLayout>
 
 @code {
-    bool sidebarExpanded = true;
+    private string? textBoxValue { get; set; }
 }

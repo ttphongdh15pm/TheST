@@ -1,0 +1,24 @@
+﻿.user-profile-container {
+    height: 100%;
+    width: 100%;
+    background: yellow;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.user-profile-avatar {
+    position: relative;
+    height:fit-content;
+    width:fit-content;
+}
+.user-profile-status {
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    position: absolute;
+    background: green;
+    border: 2px solid;
+    bottom: 0;
+    right: 0;
+}
